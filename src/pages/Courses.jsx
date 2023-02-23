@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fontawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 library.add(faCheckCircle, faTimesCircle);
 
@@ -10,9 +10,13 @@ function Courses() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('db.json');
-      const json = await response.json();
-      setData(json);
+      try {
+        const response = await fetch('db.json');
+        const json = await response.json();
+        setData(json);
+      } catch (error) {
+        console.error(error);
+      }
     }
     fetchData();
   }, []);
@@ -24,18 +28,19 @@ function Courses() {
           <img src={item.imagePath} className="card-img-top" alt={item.title} />
           <div className="card-body">
             <h5 className="card-title">{item.title}</h5>
-            <p className="card-dates">'Dates:'{item.dates.start_date}-{item.dates.start_date}</p>
+            <p className="card-dates">Dates: {item.dates.start_date}-{item.dates.end_date}</p>
             <p className="card-boolean">{item.online ? (
-           <i className="fas fa-check-circle"></i>
-           ) : (
-            <i className="fas fa-times-circle"></i>
-          )}</p>
+              <FontAwesomeIcon icon="check-circle" />
+            ) : (
+              <FontAwesomeIcon icon="times-circle" />
+            )}</p>
           </div>
         </div>
       ))}
     </div>
   );
 }
+
 function App() {
   return (
     <div>
